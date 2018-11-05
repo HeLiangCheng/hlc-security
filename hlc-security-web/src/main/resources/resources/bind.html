@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>第三方登录绑定</title>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+
+<body>
+   <form id="bindfrom" action="" method="">
+        <div>
+            <h3>第三方登录</h3>
+            <table>
+                <tr>
+                    <td>类型</td>
+                    <td>绑定</td>
+                    <td>解绑</td>
+                </tr>
+                <tr>
+                    <td>QQ</td>
+                    <td> <input type="button" value="绑定" id="qq"  /> </td>
+                    <td> <input type="button" value="解绑" id="qqunbind"  /> </td>
+                </tr>
+                <tr>
+                    <td>微信</td>
+                    <td> <input type="button" value="绑定" id="weixin" /> </td>
+                    <td> <input type="button" value="解绑" id="weixinunbind" /> </td>
+                </tr>
+            </table>
+        </div>
+   </form>
+   <script type="text/javascript">
+       $(function(){
+           //qq绑定
+           $("#qq").click(function () {
+               $("#bindfrom").attr("action", "/connect/callback.do").attach("method","POST").submit();
+           });
+
+           //微信绑定
+           $("#weixin").click(function () {
+               $("#bindfrom").attr("action", "/connect/weixin").attach("method","POST").submit();
+           });
+
+           //qq解绑
+           $("#qqunbind").click(function() {
+               $.ajax({
+                   url: "/connect/callback.do",
+                   type: "DELETE",
+                   data: {}
+               });
+           });
+
+           //微信解绑
+           $("#weixinunbind").click(function(){
+               $.ajax({
+                   url: "/connect/weixin",
+                   type: "DELETE",
+                   data: {}
+               });
+           });
+       });
+   </script>
+</body>
+</html>

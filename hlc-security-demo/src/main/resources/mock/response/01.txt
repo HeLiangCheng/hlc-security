@@ -1,0 +1,6 @@
+{
+    "name": "tom",
+    "age": 12,
+    "gander": "男"，
+    "address":"四川绵阳"
+}
