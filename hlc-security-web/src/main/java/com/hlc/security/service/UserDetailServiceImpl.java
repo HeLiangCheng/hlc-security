@@ -34,13 +34,13 @@ public class UserDetailServiceImpl implements UserDetailsService,SocialUserDetai
             //user = new User("admin", "123456", AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
             String pwdStr = passwordEncoder.encode("123456");
             System.out.println(pwdStr);
-            user = new User("admin", pwdStr, true, true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
+            user = new User("admin", pwdStr, true, true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList("admin,ROLE_USER"));
             logger.info("验证成功");
         }
         //按手机号码查找
         if ("123456".equals(username)) {
             logger.info("开始验证用户手机验证码");
-            user = new User("admin", "123456", true, true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
+            user = new User("admin", "123456", true, true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList("admin,ROLE_USER"));
             logger.info("验证成功");
         }
         return user;
@@ -52,7 +52,7 @@ public class UserDetailServiceImpl implements UserDetailsService,SocialUserDetai
     public SocialUserDetails loadUserByUserId(String userId) throws UsernameNotFoundException {
         logger.info("社交登录User");
         String pwdStr = passwordEncoder.encode("123456");
-        SocialUser user = new SocialUser("admin", pwdStr, true, true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
+        SocialUser user = new SocialUser("admin", pwdStr, true, true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList("admin,ROLE_USER"));
         return user;
     }
 

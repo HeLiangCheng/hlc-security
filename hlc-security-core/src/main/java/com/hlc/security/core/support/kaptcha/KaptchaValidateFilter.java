@@ -6,26 +6,17 @@ import com.hlc.security.core.support.properties.SecurityProperties;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.social.connect.web.HttpSessionSessionStrategy;
-import org.springframework.social.connect.web.SessionStrategy;
 import org.springframework.util.AntPathMatcher;
-import org.springframework.web.bind.ServletRequestBindingException;
-import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -68,16 +59,21 @@ public class KaptchaValidateFilter extends OncePerRequestFilter implements Initi
         if (validateType != null) {
             try {
                 //获取校验处理器类型
-                String proKey = validateType + "KaptchaCodeProcessor";
+                String proKey = validateType.toString().toLowerCase() + "KaptchaCodeProcessor";
                 if (kaptchaCodeProcessorMap != null && kaptchaCodeProcessorMap.containsKey(proKey)) {
                     KaptchaCodeProcessor kaptchaProcessor = kaptchaCodeProcessorMap.get(proKey);
                     ServletWebRequest webRequest = new ServletWebRequest(request, response);
                     kaptchaProcessor.validate(webRequest);
+                } else {
+                    failureHandler.onAuthenticationFailure(request, response, new KaptchaException("为查找到适合的验证码处理器"));
+                    return;
                 }
             } catch (KaptchaException ex) {
                 failureHandler.onAuthenticationFailure(request, response, ex);
+                return;
             } catch (Exception ex) {
-                System.out.println(ex.getMessage());
+                failureHandler.onAuthenticationFailure(request, response, new KaptchaException(ex.getMessage()));
+                return;
             }
         }
         filterChain.doFilter(request, response);

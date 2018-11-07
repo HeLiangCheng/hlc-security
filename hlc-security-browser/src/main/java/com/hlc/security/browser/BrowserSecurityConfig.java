@@ -1,9 +1,8 @@
 package com.hlc.security.browser;
 
-import com.hlc.security.browser.authentication.HlcAuthenticationFailureHandler;
-import com.hlc.security.browser.authentication.HlcAuthenticationSuccessHandler;
-import com.hlc.security.browser.logout.HlcLogoutSuccessHandler;
-import com.hlc.security.browser.session.HlcExpiredSessionStrategy;
+import com.hlc.security.browser.authentication.BrowserAuthenticationFailureHandler;
+import com.hlc.security.browser.authentication.BrowserAuthenticationSuccessHandler;
+import com.hlc.security.core.AbstractSecurityCoreConfig;
 import com.hlc.security.core.authentication.mobile.SmsCodeAuthenticationConfig;
 import com.hlc.security.core.constant.SecurityConstant;
 import com.hlc.security.core.support.kaptcha.KaptchaValidateFilter;
@@ -14,8 +13,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
@@ -30,14 +27,12 @@ import javax.sql.DataSource;
  * Created by Liang on 2018/9/7.
  */
 @Configuration
-public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
+public class BrowserSecurityConfig extends AbstractSecurityCoreConfig {
 
     @Autowired
     private SecurityProperties securityProperties;
     @Autowired
-    private HlcAuthenticationSuccessHandler hlcAuthenticationSuccessHandler;
-    @Autowired
-    private HlcAuthenticationFailureHandler authenticationFailureHandler;
+    private BrowserAuthenticationFailureHandler authenticationFailureHandler;
     @Autowired
     private DataSource dataSource;
     @Autowired
@@ -53,10 +48,6 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private LogoutSuccessHandler logoutSuccessHandler;
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     @Bean
     public KaptchaValidateFilter kaptchaValidateFilter() throws Exception {
@@ -92,18 +83,10 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable();
        */
 
+        applyPasswordAuthenticationConfig(http);
+
         http.addFilterBefore(kaptchaValidateFilter(), UsernamePasswordAuthenticationFilter.class)
-                //form表单登录
-                .formLogin()
-                //配置默认登录页
-                .loginPage(SecurityConstant.DEFAULT_AUTHENTICATION_ACTION)
-                //登录默认处理地址
-                .loginProcessingUrl(SecurityConstant.DEFAULT_USERNAMEPASSWORD_LOGIN_ACTION)
-                //登录成功和登录失败处理器
-                .successHandler(hlcAuthenticationSuccessHandler)
-                .failureHandler(authenticationFailureHandler)
                 // 社交登录相关配置
-                .and()
                 .apply(hlcSocialConfigurer)
                 //记住我功能配置
                 .and()

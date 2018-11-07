@@ -28,9 +28,17 @@
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
 
+		<!--
 		<dependency>
 			<groupId>com.hlc.security</groupId>
 			<artifactId>hlc-security-browser</artifactId>
+			<version>${hlc.security.version}</version>
+		</dependency>
+		-->
+
+		<dependency>
+			<groupId>com.hlc.security</groupId>
+			<artifactId>hlc-security-app</artifactId>
 			<version>${hlc.security.version}</version>
 		</dependency>
 

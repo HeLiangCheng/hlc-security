@@ -1,4 +1,4 @@
-package com.hlc.security.browser.authentication;
+package com.hlc.security.app.authentication;
 
 
 import com.hlc.security.core.constant.LoginType;
@@ -23,7 +23,7 @@ import java.io.IOException;
  *  SpringSecurity认证默认实现类：   SimpleUrlAuthenticationFailureHandler
  */
 @Component("authenticationFailureHandler")
-public class HlcAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
+public class AppAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -35,7 +35,6 @@ public class HlcAuthenticationFailureHandler extends SimpleUrlAuthenticationFail
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
         logger.info("登录失败,原因："+e.getMessage());
-        logger.error(response.getStatus() + "");
         if (LoginType.JSON.equals(securityProperties.getBrowser().getHandlerType())) {
             response.setContentType("application/json;charset=UTF-8");
             response.getWriter().println(objectMapper.writeValueAsString(e));

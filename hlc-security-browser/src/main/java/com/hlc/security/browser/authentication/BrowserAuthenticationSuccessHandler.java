@@ -23,10 +23,10 @@ import java.io.IOException;
  * SpringSecurity正确认证处理器默认实现：  SavedRequestAwareAuthenticationSuccessHandler
  *
  */
-@Component("hlcAuthenticationSuccessHandler")
-public class HlcAuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
+@Component("authenticationSuccessHandler")
+public class BrowserAuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
-    private Logger logger = LoggerFactory.getLogger(HlcAuthenticationSuccessHandler.class);
+    private Logger logger = LoggerFactory.getLogger(BrowserAuthenticationSuccessHandler.class);
 
     private ObjectMapper objectMapper = new ObjectMapper();
 

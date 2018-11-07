@@ -1,6 +1,5 @@
 package com.hlc.security.core.support.kaptcha;
 
-import com.hlc.security.core.constant.SecurityConstant;
 import com.hlc.security.core.constant.ValidateType;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +28,8 @@ public abstract  class AbstractKaptchaCodeProcessor<T extends KaptchaCode> imple
     @Autowired
     private Map<String, KaptchaGenerateHandler> generateHandlerMap;
     private SessionStrategy strategy = new HttpSessionSessionStrategy();
+    @Autowired
+    private KaptchaRepository kaptchaRepository;
 
 
     @Override
@@ -65,9 +66,8 @@ public abstract  class AbstractKaptchaCodeProcessor<T extends KaptchaCode> imple
      * @param request
      */
     private void save(ServletWebRequest request, T code) {
-        String kaptchaKey = SESSION_KEY_PREFIX + getValidateType();
-        KaptchaCode kaptcode = new KaptchaCode(code.getCode(),code.getExpireTime());
-        strategy.setAttribute(request, kaptchaKey, kaptcode);
+        KaptchaCode kaptcode = new KaptchaCode(code.getCode(), code.getExpireTime());
+        kaptchaRepository.save(request, kaptcode, getValidateType());
     }
 
     /**
@@ -80,8 +80,7 @@ public abstract  class AbstractKaptchaCodeProcessor<T extends KaptchaCode> imple
     @Override
     public void validate(ServletWebRequest request) throws Exception {
         ValidateType codeType = getValidateType();
-        String validSessionKey = SESSION_KEY_PREFIX + codeType;
-        T code = (T) strategy.getAttribute(request, validSessionKey);
+        KaptchaCode code = kaptchaRepository.get(request, getValidateType());
         String reqValicode = null;
         try {
             reqValicode = ServletRequestUtils.getStringParameter(request.getRequest(), codeType.getValidateTypeByParam());
@@ -95,13 +94,13 @@ public abstract  class AbstractKaptchaCodeProcessor<T extends KaptchaCode> imple
             throw new KaptchaException("输入验证码不能为空");
         }
         if (LocalDateTime.now().isAfter(code.getExpireTime())) {
-            strategy.removeAttribute(request, validSessionKey);
+            kaptchaRepository.remove(request, getValidateType());
             throw new KaptchaException("验证码已经过期");
         }
         if (!reqValicode.equals(code.getCode())) {
             throw new KaptchaException("验证码不匹配");
         }
-        strategy.removeAttribute(request, validSessionKey);
+        kaptchaRepository.remove(request, getValidateType());
     }
 
     /**

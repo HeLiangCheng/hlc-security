@@ -8,8 +8,6 @@ import org.springframework.web.context.request.ServletWebRequest;
  */
 public interface KaptchaCodeProcessor {
 
-    public static final String SESSION_KEY_PREFIX = "hlc_security_kaptcha_";
-
     /**
      * 验证码处理：包括验证码生成，存储，发送
      * @param request

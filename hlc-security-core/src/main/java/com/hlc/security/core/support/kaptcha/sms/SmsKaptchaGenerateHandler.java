@@ -7,6 +7,9 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 /**
  * Created by Liang on 2018/10/26.
  */
@@ -21,6 +24,7 @@ public class SmsKaptchaGenerateHandler implements KaptchaGenerateHandler {
         String code = RandomStringUtils.randomNumeric(6);
         SmsKaptchaCode smscode = new SmsKaptchaCode();
         smscode.setCode(code);
+        smscode.setExpireTime(LocalDateTime.now().plusMinutes(Long.valueOf(securityProperties.getVerifycode().getSms().getExpire())));
         return smscode;
     }
 
