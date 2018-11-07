@@ -1,5 +1,5 @@
 # hlc-security安全模块项目
-使用SpringSecurity、SpringSocial、SpringSecurityOAuth开发的通用系统认证、授权安全框架,适用于web,App,小程序等常见认证场景
+使用SpringSecurity、SpringSocial、SpringSecurityOAuth开发的通用系统认证、授权安全框架,适用于web,App,小程序等常见认证场景，参考慕课网《Spring Security开发安全的REST服务》教程实现，并在其基础上进行重构和扩展。
 
 ## 模块介绍
 | 模块名称          | 主要作用           | 备注  |
