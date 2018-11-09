@@ -1,6 +1,7 @@
 package com.hlc.security.core.support.properties;
 
 import com.hlc.security.core.support.properties.kaptcha.VerifyCodeProperties;
+import com.hlc.security.core.support.properties.oauth2.OAuth2Properties;
 import com.hlc.security.core.support.properties.social.SocialProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -13,6 +14,7 @@ public class SecurityProperties {
     private BrowserProperties browser = new BrowserProperties();
     private VerifyCodeProperties verifycode = new VerifyCodeProperties();
     private SocialProperties social = new SocialProperties();
+    private OAuth2Properties oauth2 = new OAuth2Properties();
 
     public BrowserProperties getBrowser() {
         return browser;
@@ -36,6 +38,14 @@ public class SecurityProperties {
 
     public void setSocial(SocialProperties social) {
         this.social = social;
+    }
+
+    public OAuth2Properties getOauth2() {
+        return oauth2;
+    }
+
+    public void setOauth2(OAuth2Properties oauth2) {
+        this.oauth2 = oauth2;
     }
 
 }

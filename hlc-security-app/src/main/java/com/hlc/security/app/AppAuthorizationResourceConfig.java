@@ -1,6 +1,7 @@
 package com.hlc.security.app;
 
 import com.hlc.security.core.authentication.mobile.SmsCodeAuthenticationConfig;
+import com.hlc.security.core.authentication.social.OpenIdAuthenticationConfig;
 import com.hlc.security.core.constant.SecurityConstant;
 import com.hlc.security.core.support.kaptcha.KaptchaValidateFilter;
 import com.hlc.security.core.support.properties.SecurityProperties;
@@ -33,6 +34,8 @@ public class AppAuthorizationResourceConfig extends ResourceServerConfigurerAdap
     private SmsCodeAuthenticationConfig smsCodeAuthenticationConfig;
     @Autowired
     private SpringSocialConfigurer hlcSocialConfigurer;
+    @Autowired
+    private OpenIdAuthenticationConfig openIdAuthenticationConfig;
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
@@ -49,6 +52,9 @@ public class AppAuthorizationResourceConfig extends ResourceServerConfigurerAdap
                 // 社交登录相关配置
                 .and()
                 .apply(hlcSocialConfigurer)
+                //openId验证登录
+                .and()
+                .apply(openIdAuthenticationConfig)
                 //验证码配置
                 .and()
                 .apply(smsCodeAuthenticationConfig)
@@ -61,6 +67,7 @@ public class AppAuthorizationResourceConfig extends ResourceServerConfigurerAdap
                         "/security/kaptcha/**",
                         "/qqLogin/**",
                         "/user/register",
+                        "/social/signUp",
                         securityProperties.getBrowser().getSession().getInvalid(),
                         securityProperties.getBrowser().getSignInUrl(),
                         securityProperties.getBrowser().getSignOutUrl()).permitAll()

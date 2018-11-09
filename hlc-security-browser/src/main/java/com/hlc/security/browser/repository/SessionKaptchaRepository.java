@@ -3,8 +3,7 @@ package com.hlc.security.browser.repository;
 import com.hlc.security.core.constant.ValidateType;
 import com.hlc.security.core.support.kaptcha.KaptchaCode;
 import com.hlc.security.core.support.kaptcha.KaptchaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.social.connect.web.HttpSessionSessionStrategy;
 import org.springframework.social.connect.web.SessionStrategy;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -16,8 +15,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 @Component
 public class SessionKaptchaRepository implements KaptchaRepository {
 
-    @Autowired
-    private SessionStrategy sessionStrategy;
+    private SessionStrategy sessionStrategy=new HttpSessionSessionStrategy();
 
     @Override
     public void save(ServletWebRequest request, KaptchaCode code, ValidateType validateType) {
@@ -36,7 +34,7 @@ public class SessionKaptchaRepository implements KaptchaRepository {
 
     /**
      * 构建验证码放入session时的key
-     * @param validateCodeType
+     * @param type
      * @return
      */
     private String getSessionKey(ValidateType type) {

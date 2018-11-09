@@ -1,6 +1,7 @@
 package com.hlc.security.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.hlc.security.app.AppSignUpUtils;
 import com.hlc.security.entity.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,6 +35,8 @@ public class UserController {
 
     @Autowired
     private ProviderSignInUtils providerSignInUtils;
+    @Autowired
+    private AppSignUpUtils appSignUpUtils;
 
 
     //@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -131,6 +134,16 @@ public class UserController {
         String userId = user.getUsername();
         // 设置两种浏览器和App社交登录后注册的不同的处理类型
         providerSignInUtils.doPostSignUp(userId, new ServletWebRequest(request));
+    }
+
+
+    //用户注册
+    @PostMapping("/appregister")
+    public void appregister(User user,HttpServletRequest request) {
+        // 无论是注册还是绑定，都会拿到一个唯一标识
+        String userId = user.getUsername();
+        // 设置两种浏览器和App社交登录后注册的不同的处理类型
+        appSignUpUtils.doPostSignUp(new ServletWebRequest(request), userId);
     }
 
 }

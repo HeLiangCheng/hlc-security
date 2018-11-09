@@ -36,4 +36,13 @@ public interface SecurityConstant {
     //session过期配置
     public static final String DEFAULT_SESSION_INVALID = "/session/invalid";
 
+    //默认的OPENID登录请求处理url
+    String DEFAULT_PROCESSING_OPENID_LOGIN_ACTION = "/authentication/openid";
+
+    //openid参数名
+    String DEFAULT_PARAMETER_NAME_OPEN_ID = "openId";
+
+    //providerId参数名
+    String DEFAULT_PARAMETER_NAME_PROVIDER_ID = "providerId";
+
 }

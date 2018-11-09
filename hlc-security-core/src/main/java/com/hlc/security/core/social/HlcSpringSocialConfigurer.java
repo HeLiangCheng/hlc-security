@@ -9,6 +9,7 @@ import org.springframework.social.security.SpringSocialConfigurer;
 public class HlcSpringSocialConfigurer extends SpringSocialConfigurer {
 
     private String filterProcessesUrl;
+    private SocialAuthenticationFilterPostProcessor authenticationFilterPostProcessor;
 
     public HlcSpringSocialConfigurer(String filterProcessesUrl) {
         this.filterProcessesUrl = filterProcessesUrl;
@@ -19,7 +20,18 @@ public class HlcSpringSocialConfigurer extends SpringSocialConfigurer {
     protected <T> T postProcess(T object) {
         SocialAuthenticationFilter filter = (SocialAuthenticationFilter) super.postProcess(object);
         filter.setFilterProcessesUrl(filterProcessesUrl);
+        if (authenticationFilterPostProcessor != null) {
+            authenticationFilterPostProcessor.process(filter);
+        }
         return (T) super.postProcess(object);
+    }
+
+    public SocialAuthenticationFilterPostProcessor getAuthenticationFilterPostProcessor() {
+        return authenticationFilterPostProcessor;
+    }
+
+    public void setAuthenticationFilterPostProcessor(SocialAuthenticationFilterPostProcessor authenticationFilterPostProcessor) {
+        this.authenticationFilterPostProcessor = authenticationFilterPostProcessor;
     }
 
 }

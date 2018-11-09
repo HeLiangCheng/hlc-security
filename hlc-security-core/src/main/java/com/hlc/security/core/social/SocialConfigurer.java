@@ -32,6 +32,8 @@ public class SocialConfigurer extends SocialConfigurerAdapter {
     private SecurityProperties securityProperties;
     @Autowired(required = false)
     private ConnectionSignUp connectionSignUp;
+    @Autowired(required = false)
+    private SocialAuthenticationFilterPostProcessor authenticationFilterPostProcessor;
 
     @Bean
     public SpringSocialConfigurer hlcSocialConfigurer() {
@@ -39,6 +41,7 @@ public class SocialConfigurer extends SocialConfigurerAdapter {
         HlcSpringSocialConfigurer configurer = new HlcSpringSocialConfigurer(processesUrl);
         //设置我们自己的用户注册页面
         configurer.signupUrl(securityProperties.getBrowser().getSignInUrl());
+        configurer.setAuthenticationFilterPostProcessor(authenticationFilterPostProcessor);
         return configurer;
     }
 
