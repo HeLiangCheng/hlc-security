@@ -1,7 +1,6 @@
 package com.hlc.security.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.hlc.security.app.AppSignUpUtils;
 import com.hlc.security.entity.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,7 +21,6 @@ import org.springframework.web.context.request.ServletWebRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,9 +33,11 @@ public class UserController {
 
     @Autowired
     private ProviderSignInUtils providerSignInUtils;
+
+    /*
     @Autowired
     private AppSignUpUtils appSignUpUtils;
-
+    */
 
     //@RequestMapping(value = "/", method = RequestMethod.GET)
     @GetMapping
@@ -143,7 +143,7 @@ public class UserController {
         // 无论是注册还是绑定，都会拿到一个唯一标识
         String userId = user.getUsername();
         // 设置两种浏览器和App社交登录后注册的不同的处理类型
-        appSignUpUtils.doPostSignUp(new ServletWebRequest(request), userId);
+        //appSignUpUtils.doPostSignUp(new ServletWebRequest(request), userId);
     }
 
 }

@@ -7,6 +7,7 @@ package com.hlc.security.core.support.properties.oauth2;
 public class OAuth2Properties {
 
     private OAuth2ClientProperties[]  clients = {};
+    private String jwtStr = "hlc_security";
 
 
     public OAuth2ClientProperties[] getClients() {
@@ -17,4 +18,11 @@ public class OAuth2Properties {
         this.clients = clients;
     }
 
+    public String getJwtStr() {
+        return jwtStr;
+    }
+
+    public void setJwtStr(String jwtStr) {
+        this.jwtStr = jwtStr;
+    }
 }

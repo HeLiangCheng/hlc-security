@@ -4,6 +4,7 @@ import com.hlc.security.browser.authentication.BrowserAuthenticationFailureHandl
 import com.hlc.security.browser.authentication.BrowserAuthenticationSuccessHandler;
 import com.hlc.security.core.AbstractSecurityCoreConfig;
 import com.hlc.security.core.authentication.mobile.SmsCodeAuthenticationConfig;
+import com.hlc.security.core.config.AuthorizeConfigManager;
 import com.hlc.security.core.constant.SecurityConstant;
 import com.hlc.security.core.support.kaptcha.KaptchaValidateFilter;
 import com.hlc.security.core.support.properties.SecurityProperties;
@@ -47,6 +48,8 @@ public class BrowserSecurityConfig extends AbstractSecurityCoreConfig {
     private SessionInformationExpiredStrategy sessionInformationExpiredStrategy;
     @Autowired
     private LogoutSuccessHandler logoutSuccessHandler;
+    @Autowired
+    private AuthorizeConfigManager authorizeConfigManager;
 
 
     @Bean
@@ -113,26 +116,15 @@ public class BrowserSecurityConfig extends AbstractSecurityCoreConfig {
                 .logoutSuccessHandler(logoutSuccessHandler)
                 //退出清除cookie
                 .deleteCookies("JSESSIONID")
-                //请求拦截配置
-                .and()
-                .authorizeRequests()
-                .antMatchers(SecurityConstant.DEFAULT_AUTHENTICATION_ACTION,
-                        securityProperties.getBrowser().getLoginPage(),
-                        "/auth/**",
-                        "/security/kaptcha/**",
-                        "/qqLogin/**",
-                        "/user/register",
-                        securityProperties.getBrowser().getSession().getInvalid(),
-                        securityProperties.getBrowser().getSignInUrl(),
-                        securityProperties.getBrowser().getSignOutUrl()).permitAll()
-                .anyRequest()
-                .authenticated()
                 //禁用csrf攻击
                 .and()
                 .csrf()
                 .disable()
                 //验证码配置
                 .apply(smsCodeAuthenticationConfig);
+
+        //注册browser请求拦截
+        authorizeConfigManager.config(http.authorizeRequests());
     }
 
 }

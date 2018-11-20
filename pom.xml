@@ -22,6 +22,9 @@
 		<module>hlc-security-app</module>
 		<module>hlc-security-browser</module>
 		<module>hlc-security-demo</module>
+		<module>sso/sso-server</module>
+		<module>sso/sso-app1</module>
+		<module>sso/sso-app2</module>
 	</modules>
 
 	<dependencyManagement>
